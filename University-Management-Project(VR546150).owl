@@ -1,0 +1,188 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns="http://www.example.org/university#"
+    xml:base="http://www.example.org/university"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
+
+    <!-- ===================== -->
+    <!-- ONTOLOGY METADATA -->
+    <!-- ===================== -->
+
+    <owl:Ontology rdf:about="http://www.example.org/university">
+        <rdfs:comment>
+            Created by Rafay Saif (VR546150)
+        </rdfs:comment>
+        <rdfs:comment>
+            Semester Project for the subject of Knowledge Representation
+        </rdfs:comment>
+        <rdfs:comment>
+            Project: University Management System
+        </rdfs:comment>
+    </owl:Ontology>
+
+    <!-- ===================== -->
+    <!-- CLASSES (20) -->
+    <!-- ===================== -->
+
+    <owl:Class rdf:about="#University"/>
+    <owl:Class rdf:about="#Faculty"/>
+    <owl:Class rdf:about="#Department"/>
+    <owl:Class rdf:about="#Program"/>
+
+    <owl:Class rdf:about="#UndergraduateProgram">
+        <rdfs:subClassOf rdf:resource="#Program"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="#GraduateProgram">
+        <rdfs:subClassOf rdf:resource="#Program"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="#Course"/>
+    <owl:Class rdf:about="#CourseSection"/>
+    <owl:Class rdf:about="#Person"/>
+
+    <owl:Class rdf:about="#Student">
+        <rdfs:subClassOf rdf:resource="#Person"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="#UndergraduateStudent">
+        <rdfs:subClassOf rdf:resource="#Student"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="#GraduateStudent">
+        <rdfs:subClassOf rdf:resource="#Student"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="#Professor">
+        <rdfs:subClassOf rdf:resource="#Person"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="#TeachingAssistant">
+        <rdfs:subClassOf rdf:resource="#Person"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="#AdministrativeStaff">
+        <rdfs:subClassOf rdf:resource="#Person"/>
+    </owl:Class>
+
+    <owl:Class rdf:about="#Enrollment"/>
+    <owl:Class rdf:about="#Examination"/>
+    <owl:Class rdf:about="#Classroom"/>
+    <owl:Class rdf:about="#Schedule"/>
+    <owl:Class rdf:about="#Degree"/>
+
+    <!-- ===================== -->
+    <!-- OBJECT PROPERTIES (40) -->
+    <!-- ===================== -->
+
+    <!-- Structural -->
+    <owl:ObjectProperty rdf:about="#hasFaculty"/>
+    <owl:ObjectProperty rdf:about="#hasDepartment"/>
+    <owl:ObjectProperty rdf:about="#offersProgram"/>
+    <owl:ObjectProperty rdf:about="#offersCourse"/>
+    <owl:ObjectProperty rdf:about="#hasSection"/>
+    <owl:ObjectProperty rdf:about="#belongsToUniversity"/>
+    <owl:ObjectProperty rdf:about="#belongsToFaculty"/>
+    <owl:ObjectProperty rdf:about="#belongsToDepartment"/>
+
+    <!-- Programs & Degrees -->
+    <owl:ObjectProperty rdf:about="#requiresCourse"/>
+    <owl:ObjectProperty rdf:about="#leadsToDegree"/>
+    <owl:ObjectProperty rdf:about="#enrolledInProgram"/>
+    <owl:ObjectProperty rdf:about="#completedDegree"/>
+    <owl:ObjectProperty rdf:about="#hasMajor"/>
+    <owl:ObjectProperty rdf:about="#hasMinor"/>
+
+    <!-- Teaching & Learning -->
+    <owl:ObjectProperty rdf:about="#teachesCourse"/>
+    <owl:ObjectProperty rdf:about="#teachesSection"/>
+    <owl:ObjectProperty rdf:about="#assistsTeaching"/>
+    <owl:ObjectProperty rdf:about="#takesCourse"/>
+    <owl:ObjectProperty rdf:about="#attendsSection"/>
+    <owl:ObjectProperty rdf:about="#supervisesStudent"/>
+
+    <!-- Enrollment & Exams -->
+    <owl:ObjectProperty rdf:about="#hasEnrollment"/>
+    <owl:ObjectProperty rdf:about="#enrollmentForCourse"/>
+    <owl:ObjectProperty rdf:about="#enrollmentForStudent"/>
+    <owl:ObjectProperty rdf:about="#hasExamination"/>
+    <owl:ObjectProperty rdf:about="#attemptsExam"/>
+    <owl:ObjectProperty rdf:about="#evaluatesExam"/>
+
+    <!-- Scheduling & Infrastructure -->
+    <owl:ObjectProperty rdf:about="#scheduledIn"/>
+    <owl:ObjectProperty rdf:about="#hasSchedule"/>
+    <owl:ObjectProperty rdf:about="#heldInClassroom"/>
+    <owl:ObjectProperty rdf:about="#examSchedule"/>
+
+    <!-- Administration -->
+    <owl:ObjectProperty rdf:about="#managesDepartment"/>
+    <owl:ObjectProperty rdf:about="#managesProgram"/>
+    <owl:ObjectProperty rdf:about="#managesCourse"/>
+    <owl:ObjectProperty rdf:about="#assignedToFaculty"/>
+    <owl:ObjectProperty rdf:about="#reportsTo"/>
+
+    <!-- Advanced / Reasoning -->
+    <owl:ObjectProperty rdf:about="#advisorOf"/>
+    <owl:ObjectProperty rdf:about="#coTeachesWith"/>
+    <owl:ObjectProperty rdf:about="#prerequisiteOf"/>
+    <owl:ObjectProperty rdf:about="#successorCourse"/>
+    <owl:ObjectProperty rdf:about="#equivalentCourse"/>
+
+    <!-- ===================== -->
+    <!-- LOGICAL AXIOMS -->
+    <!-- ===================== -->
+
+    <!-- Disjoint roles -->
+    <owl:AllDisjointClasses>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="#Student"/>
+            <rdf:Description rdf:about="#Professor"/>
+            <rdf:Description rdf:about="#AdministrativeStaff"/>
+        </owl:members>
+    </owl:AllDisjointClasses>
+
+    <!-- Student must be enrolled in a program -->
+    <owl:Class rdf:about="#Student">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#enrolledInProgram"/>
+                <owl:someValuesFrom rdf:resource="#Program"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+
+    <!-- Student must take at least one course -->
+    <owl:Class rdf:about="#Student">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#takesCourse"/>
+                <owl:someValuesFrom rdf:resource="#Course"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+
+    <!-- Professor must teach at least one course -->
+    <owl:Class rdf:about="#Professor">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#teachesCourse"/>
+                <owl:someValuesFrom rdf:resource="#Course"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+
+    <!-- UndergraduateStudent definition -->
+    <owl:Class rdf:about="#UndergraduateStudent">
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="#enrolledInProgram"/>
+                <owl:someValuesFrom rdf:resource="#UndergraduateProgram"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+
+</rdf:RDF>
